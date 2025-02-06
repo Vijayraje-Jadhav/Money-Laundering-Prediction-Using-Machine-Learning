@@ -1,3 +1,7 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+# More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
+
 name: Build and deploy Python app to Azure Web App - moneylaunderingml
 
 on:
@@ -10,7 +14,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: read #This is required for actions/checkout
 
     steps:
       - uses: actions/checkout@v4
@@ -20,11 +24,18 @@ jobs:
         with:
           python-version: '3.9'
 
+      - name: Create and start virtual environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+      
       - name: Install dependencies
         run: pip install -r requirements.txt
+        
+      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -x 'venv/*' -r
+        run: zip release.zip ./* -r
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
@@ -32,6 +43,7 @@ jobs:
           name: python-app
           path: |
             release.zip
+            !venv/
 
   deploy:
     runs-on: ubuntu-latest
@@ -40,8 +52,8 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write
-      contents: read
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
 
     steps:
       - name: Download artifact from build job
@@ -52,17 +64,18 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
+      
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DA1AE4235C1C410F81E3D631860A2DFE }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C02B2C916CF64A0A8C86576BDD070F48 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_2B98025200514FEAB5A178065FE775D8 }}
-
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D76860DF074842AFA93794AE5BC45336 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_30537974F7FE4615B6A9C5BA82098069 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C8621B9DEEE943D1947DA63D7D280862 }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
           app-name: 'moneylaunderingml'
-          slot-name: 'Dev/Test'
+          slot-name: 'Production'
+          
