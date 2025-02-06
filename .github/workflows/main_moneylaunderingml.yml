@@ -55,13 +55,13 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DA1AE4235C1C410F81E3D631860A2DFE }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C02B2C916CF64A0A8C86576BDD070F48 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_2B98025200514FEAB5A178065FE775D8 }}
+          client-id: ${{ 814d872f-1a41-4dc1-bacb-2907fa5d02b4 }}
+          tenant-id: ${{ 44889b3f-b5c1-4585-80d3-1cb23fd8c71c}}
+          subscription-id: ${{ 0eecd7ee-e73f-4cab-81b6-eb75db33654a }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
           app-name: 'moneylaunderingml'
-          slot-name: 'Production'
+          slot-name: 'Dev/Test'
