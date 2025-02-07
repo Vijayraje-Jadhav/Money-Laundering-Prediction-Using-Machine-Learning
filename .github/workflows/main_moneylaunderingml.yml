@@ -64,5 +64,5 @@ jobs:
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: 'moneylaunderingml'
+          app-name: 'vijay'
           slot-name: 'Production'
