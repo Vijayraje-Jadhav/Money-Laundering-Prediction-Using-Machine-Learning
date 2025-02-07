@@ -64,4 +64,4 @@ jobs:
         id: deploy-to-webapp
         with:
           app-name: 'moneylaunderingml'
-          slot-name: 'Dev/Test'
+          slot-name: 'Production'
